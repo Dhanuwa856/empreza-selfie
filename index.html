@@ -638,7 +638,7 @@
     const DEFAULT_SUPABASE_URL = "https://feunrcibwemtfbgtmxzd.supabase.co";
     const DEFAULT_SUPABASE_KEY = "sb_publishable_xVRwK7LRaukbOG5UHmg-VQ_y-FiOAZF";
     const DEFAULT_BUCKET_NAME  = "empreza-media";
-    const DEFAULT_ADMIN_PASS   = "empreza2026";
+    const DEFAULT_ADMIN_PASS   = "Empreza@Victory2026!";
 
     const STORAGE_KEY_LOCAL_PHOTOS = "empreza_en_v2_photos";
     const STORAGE_KEY_CONFIG       = "empreza_en_v2_config";
@@ -651,11 +651,22 @@
     function getAppConfig() {
       try {
         const saved = JSON.parse(localStorage.getItem(STORAGE_KEY_CONFIG) || "{}");
+        const adminPass = saved.adminPass === LEGACY_ADMIN_PASS
+          ? DEFAULT_ADMIN_PASS
+          : (saved.adminPass || DEFAULT_ADMIN_PASS);
+
+        if (saved.adminPass === LEGACY_ADMIN_PASS) {
+          localStorage.setItem(STORAGE_KEY_CONFIG, JSON.stringify({
+            ...saved,
+            adminPass
+          }));
+        }
+
         return {
           url: (saved.url || DEFAULT_SUPABASE_URL).replace(/\/$/, ""),
           key: saved.key || DEFAULT_SUPABASE_KEY,
           bucket: saved.bucket || DEFAULT_BUCKET_NAME,
-          adminPass: saved.adminPass || DEFAULT_ADMIN_PASS
+          adminPass
         };
       } catch (e) {
         return {
