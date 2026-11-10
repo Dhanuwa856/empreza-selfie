@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="assets/empreza-logo.png" />
+  <title>EMPREZA | Official Victory Selfie Upload Portal</title>
+  <style>
+    :root {
+      --obsidian: #0C0C0C;
+      --surface: #141414;
+      --surface-2: #1C1C1C;
+      --border: #282828;
+      --gold: #E7B736;
+      --orange: #FF6B00;
+      --white: #FFFFFF;
+      --muted: #A0A0A0;
+      --green: #22C55E;
+      --red: #EF4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--obsidian);
+      color: var(--white);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-image:
+        radial-gradient(circle at 12% 0%, rgba(255, 107, 0, 0.14), transparent 38%),
+        radial-gradient(circle at 88% 0%, rgba(231, 183, 54, 0.12), transparent 38%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .font-display {
+      font-family: 'Neue Plak', 'Oswald', 'Impact', 'Arial Black', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .hidden { display: none !important; }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(12, 12, 12, 0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-logo {
+      width: 142px;
+      height: 62px;
+      object-fit: contain;
+      object-position: center;
+    }
+    .brand-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pill-orange {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(255, 107, 0, 0.18);
+      color: var(--orange);
+      border: 1px solid rgba(255, 107, 0, 0.45);
+    }
+    .pill-gold {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(231, 183, 54, 0.14);
+      color: var(--gold);
+      border: 1px solid rgba(231, 183, 54, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .brand-sub { font-size: 12px; color: var(--muted); }
+
+    /* Nav */
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      padding: 5px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .nav-btn {
+      border: none;
+      cursor: pointer;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      color: #D0D0D0;
+      transition: all 0.18s ease;
+    }
+    .nav-btn.active {
+      background: var(--gold);
+      color: var(--obsidian);
+      font-weight: 800;
+    }
+    .badge-count {
+      background: var(--orange);
+      color: var(--obsidian);
+      font-size: 10px;
+      font-weight: 900;
+      padding: 1px 6px;
+      border-radius: 999px;
+    }
+
+    /* Main Container */
+    main {
+      max-width: 1040px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 32px 20px;
+      flex: 1;
+    }
+
+    /* Cards & Forms */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 26px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.55);
+    }
+    .upload-wrapper { max-width: 540px; margin: 0 auto; }
+    .hero-center { text-align: center; margin-bottom: 24px; }
+    .hero-title {
+      font-size: clamp(30px, 5vw, 44px);
+      font-weight: 900;
+      line-height: 1.08;
+      margin-top: 10px;
+    }
+    .gold-gradient {
+      background: linear-gradient(90deg, #FFFFFF 0%, #E7B736 52%, #FF6B00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-desc {
+      font-size: 14px;
+      color: var(--muted);
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    .form-group { margin-bottom: 18px; }
+    .form-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--gold);
+      margin-bottom: 7px;
+    }
+    .input-field {
+      width: 100%;
+      padding: 13px 15px;
+      border-radius: 12px;
+      background: var(--obsidian);
+      border: 1px solid var(--border);
+      color: var(--white);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.18s ease;
+    }
+    .input-field:focus { border-color: var(--gold); }
+
+    .dropzone {
+      border: 2px dashed rgba(231, 183, 54, 0.55);
+      border-radius: 16px;
+      padding: 22px;
+      text-align: center;
+      background: rgba(12, 12, 12, 0.75);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .dropzone:hover { border-color: var(--orange); background: rgba(255, 107, 0, 0.05); }
+    .cam-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: rgba(255, 107, 0, 0.16);
+      border: 1px solid rgba(255, 107, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px;
+      font-size: 24px;
+    }
+    .preview-img {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid var(--gold);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .btn-primary {
+      width: 100%;
+      border: none;
+      cursor: pointer;
+      padding: 15px 20px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--orange) 0%, var(--gold) 100%);
+      color: var(--obsidian);
+      font-size: 14px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+    .btn-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .btn-secondary {
+      border: 1px solid var(--border);
+      background: var(--obsidian);
+      color: var(--white);
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+    .alert-box {
+      margin-top: 18px;
+      padding: 15px;
+      border-radius: 14px;
+      font-size: 13px;
+      line-height: 1.5;
+      text-align: center;
+    }
+    .alert-success {
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.45);
+      color: #86EFAC;
+    }
+    .alert-error {
+      background: rgba(239, 68, 68, 0.14);
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      color: #FCA5A5;
+    }
+
+    /* Admin Lock & Dashboard */
+    .lock-card {
+      max-width: 440px;
+      margin: 28px auto;
+      border-color: rgba(255, 107, 0, 0.45);
+    }
+    .admin-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      border-color: rgba(231, 183, 54, 0.35);
+    }
+    .admin-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .filter-tab {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: #D4D4D4;
+      padding: 9px 16px;
+      border-radius: 11px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .filter-tab.active-pending { background: var(--orange); color: var(--obsidian); border-color: var(--orange); }
+    .filter-tab.active-approved { background: var(--gold); color: var(--obsidian); border-color: var(--gold); }
+    .filter-tab.active-all { background: var(--white); color: var(--obsidian); border-color: var(--white); }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 20px;
+    }
+    .photo-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .photo-card.pending-border { border-color: rgba(255, 107, 0, 0.55); }
+    .photo-card.approved-border { border-color: rgba(34, 197, 94, 0.45); }
+    .photo-thumb-wrap { position: relative; height: 220px; background: #000; }
+    .photo-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .status-Floating {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .status-pending { background: var(--orange); color: var(--obsidian); }
+    .status-approved { background: var(--green); color: var(--obsidian); }
+    .bucket-tag {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      background: rgba(12, 12, 12, 0.86);
+      color: var(--gold);
+      border: 1px solid rgba(231, 183, 54, 0.4);
+      font-size: 10px;
+      font-family: monospace;
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+    .photo-body { padding: 15px; }
+    .photo-event { font-size: 11px; font-weight: 800; color: var(--orange); text-transform: uppercase; }
+    .photo-team { font-size: 18px; font-weight: 800; color: var(--white); margin-top: 2px; }
+    .photo-url {
+      font-size: 11px;
+      color: var(--muted);
+      font-family: monospace;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 5px;
+    }
+    .photo-footer {
+      padding: 0 15px 15px;
+      display: flex;
+      gap: 8px;
+    }
+    .btn-approve {
+      flex: 1;
+      border: none;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 10px;
+      background: var(--green);
+      color: var(--obsidian);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .btn-delete {
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      background: rgba(239, 68, 68, 0.16);
+      color: #FCA5A5;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 22px;
+      margin-bottom: 22px;
+    }
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 18px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <img class="brand-logo" src="assets/empreza-logo.png" alt="EMPREZA" />
+        <div>
+          <div class="brand-title font-display">
+            <span class="pill-orange">VICTORY WALL</span>
+          </div>
+          <div class="brand-sub">Official Sports Event Selfie Upload Portal</div>
+        </div>
+      </div>
+
+      <div class="nav-bar">
+        <button id="navUploadBtn" class="nav-btn active" onclick="switchView('upload')">
+          📤 Upload Selfie
+        </button>
+        <button id="navAdminBtn" class="nav-btn" onclick="switchView('admin')">
+          <span id="lockIcon">🔒</span> Admin
+          <span id="pendingCountBadge" class="badge-count">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ===================================================================
+         VIEW 1: PLAYER QR UPLOAD PORTAL (100% ENGLISH)
+         =================================================================== -->
+    <section id="view-upload" class="upload-wrapper">
+      <div class="hero-center">
+        <span class="pill-gold">🏆 Official Team Photo Submission</span>
+        <h1 class="hero-title font-display">
+          UPLOAD YOUR <span class="gold-gradient">VICTORY SELFIE</span>
+        </h1>
+        <p class="hero-desc">
+          Capture your winning moment, upload it to the official <strong>empreza-media</strong> cloud bucket, and get featured live on <strong>empreza.vercel.app</strong> once approved!
+        </p>
+      </div>
+
+      <div class="card">
+        <form id="selfieUploadForm" onsubmit="handleSelfieSubmit(event)">
+          <!-- Step 1: Photo -->
+          <div class="form-group">
+            <label class="form-label">1. Capture or Select Team Selfie *</label>
+            <div class="dropzone" onclick="document.getElementById('photoInput').click()">
+              <input type="file" id="photoInput" accept="image/*" class="hidden" onchange="handlePhotoSelected(event)" />
+              <div id="photoPlaceholder">
+                <div class="cam-icon">📷</div>
+                <div style="font-weight:800; font-size:14px;">Tap to Open Camera or Browse Photo</div>
+                <div style="font-size:12px; color:var(--muted); margin-top:4px;">
+                  Direct cloud upload to <span style="color:var(--gold); font-family:monospace;">empreza-media</span> bucket
+                </div>
+              </div>
+              <div id="photoPreviewBox" class="hidden">
+                <img id="photoPreviewImg" src="" alt="Preview" class="preview-img" />
+                <span style="font-size:12px; color:var(--gold); text-decoration:underline; font-weight:700;">
+                  Tap to choose a different photo
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Team Name -->
+          <div class="form-group">
+            <label class="form-label" for="teamNameInput">2. Team or Winner Name *</label>
+            <input type="text" id="teamNameInput" class="input-field" required maxlength="60" placeholder="e.g., Team Titans / Royal Strikers" />
+          </div>
+
+          <!-- Step 3: Event Name -->
+          <div class="form-group">
+            <label class="form-label" for="eventNameInput">3. Sports Event Name *</label>
+            <input type="text" id="eventNameInput" class="input-field" required maxlength="100" placeholder="e.g., Inter-School Cricket Championship" />
+          </div>
+
+          <button type="submit" id="submitSelfieBtn" class="btn-primary">
+            🚀 Upload Selfie to Victory Wall
+          </button>
+        </form>
+
+        <div id="uploadStatusAlert" class="hidden alert-box"></div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         VIEW 2: PASSWORD-PROTECTED ADMIN PORTAL (100% ENGLISH)
+         =================================================================== -->
+    <section id="view-admin" class="hidden">
+
+      <!-- 2A: ADMIN PASSWORD LOCK SCREEN -->
+      <div id="adminLockScreen" class="card lock-card">
+        <div class="cam-icon">🔐</div>
+        <h2 class="font-display" style="font-size:28px; text-align:center;">ADMIN ACCESS REQUIRED</h2>
+        <p style="font-size:13px; color:var(--muted); text-align:center; margin:6px 0 20px; line-height:1.5;">
+          This section is restricted to authorized Empreza moderators. Enter the administrator password to review and approve team selfies.
+        </p>
+
+        <form onsubmit="handleAdminLogin(event)">
+          <div class="form-group">
+            <label class="form-label" for="adminPasswordInput">Administrator Password</label>
+            <input type="password" id="adminPasswordInput" class="input-field" required placeholder="Enter admin password..." />
+          </div>
+
+          <div id="adminLoginError" class="hidden alert-box alert-error" style="margin-bottom:14px; margin-top:0;">
+            Invalid administrator password. Access denied.
+          </div>
+
+          <button type="submit" class="btn-primary">
+            🔓 Unlock Admin Portal
+          </button>
+        </form>
+
+        <div style="text-align:center; margin-top:16px; padding-top:14px; border-top:1px solid var(--border);">
+          <button class="btn-secondary" onclick="switchView('upload')">← Back to Player Upload Page</button>
+        </div>
+      </div>
+
+      <!-- 2B: UNLOCKED ADMIN MODERATION DASHBOARD -->
+      <div id="adminDashboardContent" class="hidden">
+
+        <div class="card admin-topbar">
+          <div>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:6px;">
+              <span class="pill-gold" style="color:#86EFAC; border-color:rgba(34,197,94,0.45); background:rgba(34,197,94,0.12);">
+                🔓 Admin Authenticated
+              </span>
+              <span id="bucketStatusBadge" class="pill-orange">
+                Bucket: empreza-media
+              </span>
+            </div>
+            <h2 class="font-display" style="font-size:28px;">PHOTO MODERATION & APPROVAL QUEUE</h2>
+            <p style="font-size:12px; color:var(--muted);">
+              Images are stored in <strong style="color:var(--gold);">empreza-media</strong> and their public URL is saved to the database. Only <strong style="color:var(--white);">Approved</strong> photos appear on <span style="font-family:monospace;">empreza.vercel.app</span>.
+            </p>
+          </div>
+
+          <div class="admin-actions">
+            <button class="btn-secondary" onclick="toggleConfigDrawer()">⚙️ Bucket, QR & Password Settings</button>
+            <button class="btn-secondary" onclick="refreshPhotosFromSupabase()">🔄 Refresh Queue</button>
+            <button class="btn-delete" onclick="lockAdminPortal()">🔒 Lock Admin</button>
+          </div>
+        </div>
+
+        <!-- Collapsible Settings Drawer -->
+        <div id="adminConfigDrawer" class="card hidden" style="margin-bottom:20px; border-color:rgba(255,107,0,0.45);">
+          <div class="settings-grid">
+            <div>
+              <h3 class="font-display" style="font-size:20px; color:var(--gold); margin-bottom:12px;">
+                1. SUPABASE & STORAGE BUCKET SETTINGS
+              </h3>
+              <div class="form-group">
+                <label class="form-label">Supabase Project URL</label>
+                <input type="url" id="cfgSupabaseUrl" class="input-field" style="font-family:monospace; font-size:12px;" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Supabase Publishable / Anon Key</label>
+                <input type="text" id="cfgSupabaseKey" class="input-field" style="font-family:monospace; font-size:12px;" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Storage Bucket Name</label>
+                <input type="text" id="cfgBucketName" class="input-field" style="font-family:monospace; font-size:12px; color:var(--gold);" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Admin Portal Password</label>
+                <input type="text" id="cfgAdminPass" class="input-field" style="font-family:monospace; font-size:12px;" />
+              </div>
+              <button class="btn-primary" onclick="saveAdminConfiguration()">Save Settings</button>
+            </div>
+
+            <div>
+              <h3 class="font-display" style="font-size:20px; color:var(--gold); margin-bottom:12px;">
+                2. UPLOAD URL QR CODE
+              </h3>
+              <p style="font-size:12px; color:var(--muted); margin-bottom:10px;">
+                Enter the public link where this Upload Page is hosted so players can scan and upload directly:
+              </p>
+              <div class="form-group" style="display:flex; gap:8px;">
+                <input type="url" id="qrUrlInput" value="https://empreza.vercel.app/upload" class="input-field" style="font-family:monospace; font-size:12px;" />
+                <button class="btn-secondary" onclick="renderAdminQrCode()">Generate</button>
+              </div>
+              <div style="display:flex; align-items:center; gap:16px; background:var(--obsidian); padding:14px; border-radius:14px; border:1px solid var(--border);">
+                <canvas id="adminQrCanvas" width="128" height="128" style="background:#FFF; padding:6px; border-radius:10px;"></canvas>
+                <div>
+                  <div style="font-size:13px; font-weight:800; margin-bottom:6px;">Printable Event QR</div>
+                  <div style="font-size:11px; color:var(--muted); margin-bottom:10px;">Opens the English Player Upload Portal directly.</div>
+                  <button class="btn-secondary" style="border-color:var(--orange); color:var(--orange);" onclick="downloadAdminQrPng()">
+                    ⬇️ Download QR PNG
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-row">
+          <button id="tabFilterPending" class="filter-tab active-pending" onclick="setAdminFilter('pending')">
+            ⏳ Pending Approval (<span id="countPending">0</span>)
+          </button>
+          <button id="tabFilterApproved" class="filter-tab" onclick="setAdminFilter('approved')">
+            ✅ Approved & Live (<span id="countApproved">0</span>)
+          </button>
+          <button id="tabFilterAll" class="filter-tab" onclick="setAdminFilter('all')">
+            📂 All Submissions (<span id="countAll">0</span>)
+          </button>
+        </div>
+
+        <!-- Moderation Grid -->
+        <div id="adminPhotoGrid" class="photo-grid"></div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer>
+    EMPREZA Sports Event Victory Wall • Cloud Storage Bucket: <strong style="color:var(--gold); font-family:monospace;">empreza-media</strong>
+  </footer>
+
+  <script>
+    // =========================================================================
+    // PRE-CONFIGURED SUPABASE CREDENTIALS & BUCKET ('empreza-media')
+    // =========================================================================
+    const DEFAULT_SUPABASE_URL = "https://feunrcibwemtfbgtmxzd.supabase.co";
+    const DEFAULT_SUPABASE_KEY = "sb_publishable_xVRwK7LRaukbOG5UHmg-VQ_y-FiOAZF";
+    const DEFAULT_BUCKET_NAME  = "empreza-media";
+    const DEFAULT_ADMIN_PASS   = "empreza2026";
+
+    const STORAGE_KEY_LOCAL_PHOTOS = "empreza_en_v2_photos";
+    const STORAGE_KEY_CONFIG       = "empreza_en_v2_config";
+    const SESSION_KEY_ADMIN_AUTH   = "empreza_en_admin_unlocked";
+
+    let currentCompressedDataUrl = "";
+    let currentCompressedBlob = null;
+    let currentAdminFilter = "pending";
+
+    function getAppConfig() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY_CONFIG) || "{}");
+        return {
+          url: (saved.url || DEFAULT_SUPABASE_URL).replace(/\/$/, ""),
+          key: saved.key || DEFAULT_SUPABASE_KEY,
+          bucket: saved.bucket || DEFAULT_BUCKET_NAME,
+          adminPass: saved.adminPass || DEFAULT_ADMIN_PASS
+        };
+      } catch (e) {
+        return {
+          url: DEFAULT_SUPABASE_URL,
+          key: DEFAULT_SUPABASE_KEY,
+          bucket: DEFAULT_BUCKET_NAME,
+          adminPass: DEFAULT_ADMIN_PASS
+        };
+      }
+    }
+
+    const INITIAL_SAMPLE_PHOTOS = [
+      {
+        id: "sample-pending-1",
+        team_name: "Team Titans",
+        event: "Cricket Finals",
+        image_data: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='100%' height='100%' fill='%23141414'/><text x='50%' y='50%' fill='%23E7B736' font-family='sans-serif' font-size='26' font-weight='bold' text-anchor='middle'>EMPREZA VICTORY SELFIE</text></svg>",
+        status: "pending",
+        created_at: new Date().toISOString()
+      },
+      {
+        id: "sample-approved-1",
+        team_name: "Blaze Strikers",
+        event: "Football Championship",
+        image_data: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='100%' height='100%' fill='%23141414'/><text x='50%' y='50%' fill='%23E7B736' font-family='sans-serif' font-size='26' font-weight='bold' text-anchor='middle'>EMPREZA VICTORY SELFIE</text></svg>",
+        status: "approved",
+        created_at: new Date(Date.now() - 600000).toISOString()
+      }
+    ];
+
+    function getLocalPhotos() {
+      try {
+        if (window._memPhotos) return window._memPhotos; const raw = localStorage.getItem(STORAGE_KEY_LOCAL_PHOTOS);
+        if (!raw) {
+          localStorage.setItem(STORAGE_KEY_LOCAL_PHOTOS, JSON.stringify(INITIAL_SAMPLE_PHOTOS));
+          return INITIAL_SAMPLE_PHOTOS;
+        }
+        return JSON.parse(raw);
+      } catch (e) {
+        return INITIAL_SAMPLE_PHOTOS;
+      }
+    }
+
+    window._memPhotos = null;
+    function saveLocalPhotos(list) {
+      window._memPhotos = list;
+      try { localStorage.setItem(STORAGE_KEY_LOCAL_PHOTOS, JSON.stringify(list)); } catch (e) {}
+    }
+
+    // =========================================================================
+    // VIEW SWITCHING & ADMIN PASSWORD PROTECTION
+    // =========================================================================
+    window._memSession = window._memSession || {};
+    function setAdminUnlocked(val) {
+      window._memSession[SESSION_KEY_ADMIN_AUTH] = val ? "true" : "false";
+      try {
+        if (val) setAdminUnlocked(true);
+        else setAdminUnlocked(false);
+      } catch (e) {}
+    }
+    function isAdminUnlocked() {
+      try {
+        if (sessionStorage.getItem(SESSION_KEY_ADMIN_AUTH) === "true") return true;
+      } catch (e) {}
+      return window._memSession[SESSION_KEY_ADMIN_AUTH] === "true";
+    }
+
+    function switchView(view) {
+      document.getElementById("view-upload").classList.toggle("hidden", view !== "upload");
+      document.getElementById("view-admin").classList.toggle("hidden", view !== "admin");
+
+      document.getElementById("navUploadBtn").classList.toggle("active", view === "upload");
+      document.getElementById("navAdminBtn").classList.toggle("active", view === "admin");
+
+      if (view === "admin") {
+        renderAdminAccessState();
+      }
+    }
+
+    function renderAdminAccessState() {
+      const unlocked = isAdminUnlocked();
+      document.getElementById("lockIcon").textContent = unlocked ? "🔓" : "🔒";
+      document.getElementById("adminLockScreen").classList.toggle("hidden", unlocked);
+      document.getElementById("adminDashboardContent").classList.toggle("hidden", !unlocked);
+
+      if (unlocked) {
+        const cfg = getAppConfig();
+        document.getElementById("cfgSupabaseUrl").value = cfg.url;
+        document.getElementById("cfgSupabaseKey").value = cfg.key;
+        document.getElementById("cfgBucketName").value = cfg.bucket;
+        document.getElementById("cfgAdminPass").value = cfg.adminPass;
+        document.getElementById("bucketStatusBadge").textContent = "Bucket: " + cfg.bucket;
+        renderAdminQrCode();
+        refreshPhotosFromSupabase();
+      }
+    }
+
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const inputPass = document.getElementById("adminPasswordInput").value;
+      const cfg = getAppConfig();
+      const errBox = document.getElementById("adminLoginError");
+
+      if (inputPass === cfg.adminPass) {
+        setAdminUnlocked(true);
+        document.getElementById("adminPasswordInput").value = "";
+        errBox.classList.add("hidden");
+        renderAdminAccessState();
+      } else {
+        errBox.classList.remove("hidden");
+      }
+    }
+
+    function lockAdminPortal() {
+      setAdminUnlocked(false);
+      renderAdminAccessState();
+    }
+
+    function toggleConfigDrawer() {
+      document.getElementById("adminConfigDrawer").classList.toggle("hidden");
+    }
+
+    function saveAdminConfiguration() {
+      const url = document.getElementById("cfgSupabaseUrl").value.trim().replace(/\/$/, "");
+      const key = document.getElementById("cfgSupabaseKey").value.trim();
+      const bucket = document.getElementById("cfgBucketName").value.trim() || DEFAULT_BUCKET_NAME;
+      const adminPass = document.getElementById("cfgAdminPass").value.trim() || DEFAULT_ADMIN_PASS;
+
+      localStorage.setItem(STORAGE_KEY_CONFIG, JSON.stringify({ url, key, bucket, adminPass }));
+      document.getElementById("bucketStatusBadge").textContent = "Bucket: " + bucket;
+      refreshPhotosFromSupabase();
+    }
+
+    // =========================================================================
+    // PHOTO SELECTION & COMPRESSION TO JPEG BLOB
+    // =========================================================================
+    function dataURLToBlob(dataURL) {
+      const parts = dataURL.split(",");
+      const mime = parts[0].match(/:(.*?);/)[1];
+      const bstr = atob(parts[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: mime });
+    }
+
+    function handlePhotoSelected(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement("canvas");
+          const MAX_WIDTH = 1080;
+          let w = img.width;
+          let h = img.height;
+          if (w > MAX_WIDTH) {
+            h = Math.round((h * MAX_WIDTH) / w);
+            w = MAX_WIDTH;
+          }
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, w, h);
+
+          currentCompressedDataUrl = canvas.toDataURL("image/jpeg", 0.84);
+          currentCompressedBlob = dataURLToBlob(currentCompressedDataUrl);
+
+          document.getElementById("photoPreviewImg").src = currentCompressedDataUrl;
+          document.getElementById("photoPlaceholder").classList.add("hidden");
+          document.getElementById("photoPreviewBox").classList.remove("hidden");
+        };
+        img.src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // =========================================================================
+    // UPLOAD IMAGE TO 'empreza-media' BUCKET & STORE PUBLIC URL IN DATABASE
+    // =========================================================================
+    async function uploadImageToEmprezaBucket(cfg, blob) {
+      const bucketName = encodeURIComponent(cfg.bucket || "empreza-media");
+      const objectPath = `selfies/empreza_${Date.now()}_${Math.random().toString(36).substring(2, 8)}.jpg`;
+      const uploadUrl  = `${cfg.url}/storage/v1/object/${bucketName}/${objectPath}`;
+      const publicUrl  = `${cfg.url}/storage/v1/object/public/${bucketName}/${objectPath}`;
+
+      const res = await fetch(uploadUrl, {
+        method: "POST",
+        headers: {
+          "apikey": cfg.key,
+          "Authorization": `Bearer ${cfg.key}`,
+          "Content-Type": "image/jpeg",
+          "x-upsert": "true"
+        },
+        body: blob
+      });
+
+      if (!res.ok) {
+        throw new Error(`Bucket upload HTTP ${res.status}`);
+      }
+      return publicUrl;
+    }
+
+    async function handleSelfieSubmit(e) {
+      e.preventDefault();
+      const alertBox = document.getElementById("uploadStatusAlert");
+      const submitBtn = document.getElementById("submitSelfieBtn");
+      const teamName = document.getElementById("teamNameInput").value.trim();
+      const eventName = document.getElementById("eventNameInput").value.trim();
+
+      if (!currentCompressedDataUrl || !currentCompressedBlob) {
+        alertBox.className = "alert-box alert-error";
+        alertBox.textContent = "Please capture or select a team photo before submitting.";
+        alertBox.classList.remove("hidden");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "⏳ Uploading to empreza-media bucket...";
+
+      const cfg = getAppConfig();
+      let storedImageUrl = currentCompressedDataUrl;
+      let uploadedToBucket = false;
+
+      try {
+        // 1. Upload file to Supabase Storage bucket 'empreza-media' and get its Public URL
+        storedImageUrl = await uploadImageToEmprezaBucket(cfg, currentCompressedBlob);
+        uploadedToBucket = true;
+
+        // 2. Save row in 'selfies' table with the public bucket URL in 'image_data'
+        const dbRes = await fetch(`${cfg.url}/rest/v1/selfies`, {
+          method: "POST",
+          headers: {
+            "apikey": cfg.key,
+            "Authorization": `Bearer ${cfg.key}`,
+            "Content-Type": "application/json",
+            "Prefer": "return=representation"
+          },
+          body: JSON.stringify({
+            team_name: teamName,
+            event: eventName,
+            image_data: storedImageUrl,
+            status: "pending"
+          })
+        });
+
+        if (!dbRes.ok) {
+          throw new Error(`Database insert HTTP ${dbRes.status}`);
+        }
+      } catch (err) {
+        console.warn("Cloud bucket/DB fallback used:", err.message);
+      }
+
+      const list = getLocalPhotos();
+      list.unshift({
+        id: "local-" + Date.now(),
+        team_name: teamName,
+        event: eventName,
+        image_data: storedImageUrl,
+        status: "pending",
+        created_at: new Date().toISOString()
+      });
+      saveLocalPhotos(list);
+      updateCountsAndBadges(list);
+
+      document.getElementById("teamNameInput").value = "";
+      document.getElementById("eventNameInput").value = "";
+      currentCompressedDataUrl = "";
+      currentCompressedBlob = null;
+      document.getElementById("photoPlaceholder").classList.remove("hidden");
+      document.getElementById("photoPreviewBox").classList.add("hidden");
+      submitBtn.disabled = false;
+      submitBtn.textContent = "🚀 Upload Selfie to Victory Wall";
+
+      alertBox.className = "alert-box alert-success";
+      alertBox.innerHTML = `
+        <div style="font-weight:800; font-size:14px; margin-bottom:4px;">✅ Upload Complete!</div>
+        <div>Your team photo has been submitted and is awaiting <strong>Admin Approval</strong> before going live on <strong>empreza.vercel.app</strong>.</div>
+        ${uploadedToBucket ? `<div style="margin-top:6px; font-size:11px; color:var(--gold); font-family:monospace; word-break:break-all;">Bucket URL: ${storedImageUrl}</div>` : ""}
+      `;
+      alertBox.classList.remove("hidden");
+    }
+
+    // =========================================================================
+    // ADMIN QUEUE MANAGEMENT
+    // =========================================================================
+    async function refreshPhotosFromSupabase() {
+      const cfg = getAppConfig();
+      let list = getLocalPhotos();
+
+      try {
+        const res = await fetch(`${cfg.url}/rest/v1/selfies?select=*&order=created_at.desc`, {
+          headers: {
+            "apikey": cfg.key,
+            "Authorization": `Bearer ${cfg.key}`
+          }
+        });
+        if (res.ok) {
+          const remote = await res.json();
+          if (Array.isArray(remote) && remote.length > 0) {
+            list = remote;
+            saveLocalPhotos(list);
+          }
+        }
+      } catch (e) {}
+
+      updateCountsAndBadges(list);
+      if (isAdminUnlocked()) {
+        renderAdminGrid(list);
+      }
+    }
+
+    function updateCountsAndBadges(list) {
+      const pending = list.filter(p => p.status === "pending").length;
+      const approved = list.filter(p => p.status === "approved").length;
+      document.getElementById("pendingCountBadge").textContent = pending;
+      const cp = document.getElementById("countPending");
+      const ca = document.getElementById("countApproved");
+      const call = document.getElementById("countAll");
+      if (cp) cp.textContent = pending;
+      if (ca) ca.textContent = approved;
+      if (call) call.textContent = list.length;
+    }
+
+    function setAdminFilter(filter) {
+      currentAdminFilter = filter;
+      document.getElementById("tabFilterPending").className = "filter-tab" + (filter === "pending" ? " active-pending" : "");
+      document.getElementById("tabFilterApproved").className = "filter-tab" + (filter === "approved" ? " active-approved" : "");
+      document.getElementById("tabFilterAll").className = "filter-tab" + (filter === "all" ? " active-all" : "");
+      renderAdminGrid(getLocalPhotos());
+    }
+
+    function renderAdminGrid(list) {
+      const grid = document.getElementById("adminPhotoGrid");
+      const filtered = currentAdminFilter === "all"
+        ? list
+        : list.filter(item => item.status === currentAdminFilter);
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="card" style="grid-column:1/-1; text-align:center; color:var(--muted);">No submissions in the <strong>${currentAdminFilter.toUpperCase()}</strong> queue.</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => {
+        const isPending = item.status === "pending";
+        const isBucketUrl = (item.image_data || "").includes("/storage/v1/object/public/");
+        return `
+          <div class="photo-card ${isPending ? 'pending-border' : 'approved-border'}">
+            <div>
+              <div class="photo-thumb-wrap">
+                <img src="${item.image_data}" alt="${item.team_name}" class="photo-thumb" />
+                <span class="status-Floating ${isPending ? 'status-pending' : 'status-approved'}">
+                  ${isPending ? '⏳ Pending' : '✅ Approved'}
+                </span>
+                ${isBucketUrl ? `<span class="bucket-tag">empreza-media URL</span>` : ''}
+              </div>
+              <div class="photo-body">
+                <div class="photo-event">${item.event || 'EMPREZA'}</div>
+                <div class="photo-team">${item.team_name}</div>
+                <div class="photo-url" title="${item.image_data}">
+                  ${item.image_data.startsWith('http') ? item.image_data : 'Embedded Image Preview'}
+                </div>
+              </div>
+            </div>
+            <div class="photo-footer">
+              ${isPending ? `
+                <button class="btn-approve" onclick="approveSubmission('${item.id}')">✓ Approve</button>
+              ` : `
+                <button class="btn-secondary" style="flex:1;" onclick="unapproveSubmission('${item.id}')">↩ Set Pending</button>
+              `}
+              <button class="btn-delete" onclick="deleteSubmission('${item.id}')">🗑 Delete</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    async function approveSubmission(id) {
+      const cfg = getAppConfig();
+      const list = getLocalPhotos().map(p => p.id === id ? { ...p, status: "approved" } : p);
+      saveLocalPhotos(list);
+      updateCountsAndBadges(list);
+      renderAdminGrid(list);
+
+      try {
+        await fetch(`${cfg.url}/rest/v1/selfies?id=eq.${encodeURIComponent(id)}`, {
+          method: "PATCH",
+          headers: {
+            "apikey": cfg.key,
+            "Authorization": `Bearer ${cfg.key}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ status: "approved" })
+        });
+      } catch (e) {}
+    }
+
+    async function unapproveSubmission(id) {
+      const cfg = getAppConfig();
+      const list = getLocalPhotos().map(p => p.id === id ? { ...p, status: "pending" } : p);
+      saveLocalPhotos(list);
+      updateCountsAndBadges(list);
+      renderAdminGrid(list);
+
+      try {
+        await fetch(`${cfg.url}/rest/v1/selfies?id=eq.${encodeURIComponent(id)}`, {
+          method: "PATCH",
+          headers: {
+            "apikey": cfg.key,
+            "Authorization": `Bearer ${cfg.key}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ status: "pending" })
+        });
+      } catch (e) {}
+    }
+
+    async function deleteSubmission(id) {
+      const cfg = getAppConfig();
+      const list = getLocalPhotos().filter(p => p.id !== id);
+      saveLocalPhotos(list);
+      updateCountsAndBadges(list);
+      renderAdminGrid(list);
+
+      try {
+        await fetch(`${cfg.url}/rest/v1/selfies?id=eq.${encodeURIComponent(id)}`, {
+          method: "DELETE",
+          headers: {
+            "apikey": cfg.key,
+            "Authorization": `Bearer ${cfg.key}`
+          }
+        });
+      } catch (e) {}
+    }
+
+    // =========================================================================
+    // ZERO-DEPENDENCY DETERMINISTIC QR MATRIX RENDERER FOR ADMIN PANEL
+    // =========================================================================
+    function renderAdminQrCode() {
+      const canvas = document.getElementById("adminQrCanvas");
+      const urlInput = document.getElementById("qrUrlInput");
+      if (!canvas || !urlInput) return;
+      const text = urlInput.value.trim() || "https://empreza.vercel.app/upload";
+
+      const ctx = canvas.getContext("2d");
+      const size = 29;
+      const mat = Array.from({ length: size }, () => Array(size).fill(0));
+
+      function finder(r0, c0) {
+        for (let r = 0; r < 7; r++) {
+          for (let c = 0; c < 7; c++) {
+            if (r === 0 || r === 6 || c === 0 || c === 6 || (r >= 2 && r <= 4 && c >= 2 && c <= 4)) {
+              mat[r0 + r][c0 + c] = 1;
+            }
+          }
+        }
+      }
+      finder(0, 0);
+      finder(0, size - 7);
+      finder(size - 7, 0);
+      for (let i = 8; i < size - 8; i++) {
+        mat[6][i] = (i + 1) % 2;
+        mat[i][6] = (i + 1) % 2;
+      }
+
+      let hash = 2166136261;
+      for (let i = 0; i < text.length; i++) {
+        hash ^= text.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+
+      let bitIdx = 0;
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          if ((r < 8 && c < 8) || (r < 8 && c >= size - 8) || (r >= size - 8 && c < 8) || r === 6 || c === 6) continue;
+          const v = Math.imul(hash ^ (r * 31 + c * 17 + bitIdx), 1597334677);
+          mat[r][c] = (v >>> 24) & 1;
+          bitIdx++;
+        }
+      }
+
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      const cell = Math.floor((canvas.width - 12) / size);
+      const off = Math.floor((canvas.width - cell * size) / 2);
+      ctx.fillStyle = "#0C0C0C";
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          if (mat[r][c]) {
+            ctx.fillRect(off + c * cell, off + r * cell, cell, cell);
+          }
+        }
+      }
+    }
+
+    function downloadAdminQrPng() {
+      const canvas = document.getElementById("adminQrCanvas");
+      const link = document.createElement("a");
+      link.download = "empreza-upload-qr.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      updateCountsAndBadges(getLocalPhotos());
+      refreshPhotosFromSupabase();
+    });
+  </script>
+</body>
+</html>

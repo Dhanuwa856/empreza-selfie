@@ -1,0 +1,52 @@
+<!-- =========================================================================
+     PASTE THIS SNIPPET INTO YOUR MAIN SITE (https://empreza.vercel.app/)
+     Pre-configured with your Supabase project & 'empreza-media' bucket URLs.
+     Fetches ONLY Admin-Approved ('status=eq.approved') photos!
+     ========================================================================= -->
+<section style="background:#0C0C0C; color:#FFFFFF; padding:48px 20px; font-family:'Plus Jakarta Sans', sans-serif;">
+  <div style="max-width:1100px; margin:0 auto;">
+    <h2 style="font-family:'Neue Plak','Oswald',sans-serif; font-size:36px; text-transform:uppercase; color:#E7B736; margin-bottom:8px;">
+      EMPREZA VICTORY WALL
+    </h2>
+    <p style="color:#AAAAAA; font-size:14px; margin-bottom:24px;">
+      Winning teams — scan the ground QR code to upload your team selfie!
+    </p>
+    <div id="empreza-approved-gallery" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:20px;">
+      <p style="color:#888;">Loading approved photos...</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  const SUPABASE_URL = "https://feunrcibwemtfbgtmxzd.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_xVRwK7LRaukbOG5UHmg-VQ_y-FiOAZF";
+
+  async function loadEmprezaApprovedPhotos() {
+    const container = document.getElementById("empreza-approved-gallery");
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/selfies?status=eq.approved&order=created_at.desc`, {
+        headers: {
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+        }
+      });
+      const photos = await res.json();
+      if (!photos || photos.length === 0) {
+        container.innerHTML = `<p style="color:#888;">No approved photos yet.</p>`;
+        return;
+      }
+      container.innerHTML = photos.map(p => `
+        <div style="background:#161616; border:1px solid rgba(231,183,54,0.4); border-radius:16px; overflow:hidden;">
+          <img src="${p.image_data}" alt="${p.team_name}" style="width:100%; height:240px; object-fit:cover; display:block;" loading="lazy" />
+          <div style="padding:14px;">
+            <div style="color:#FF6B00; font-size:11px; font-weight:700; text-transform:uppercase;">${p.event || 'EMPREZA'}</div>
+            <div style="color:#FFFFFF; font-size:18px; font-weight:700; margin-top:2px;">${p.team_name}</div>
+          </div>
+        </div>
+      `).join("");
+    } catch (err) {
+      container.innerHTML = `<p style="color:#FF6B00;">Unable to load approved photos.</p>`;
+    }
+  }
+  loadEmprezaApprovedPhotos();
+</script>
